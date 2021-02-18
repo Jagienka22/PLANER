@@ -1,9 +1,32 @@
 from tkinter import *
 from tkcalendar import *
 import datetime
-
+from pynotifier import Notification
+import threading
 
 from db import Database
+
+def abc( threadName, delay):
+	s.enter(5, 1, do_something, (s,))
+	s.run()
+
+
+import sched, time
+s = sched.scheduler(time.time, time.sleep)
+def do_something(sc): 
+    print("Doing stuff...")
+    # do your stuff
+    s.enter(5, 1, do_something, (sc,))
+
+
+def send_notify(title='Notification Title', description='Notification Description'):
+	Notification(
+		title=title,
+		description=description,
+		icon_path='path/to/image/file/icon.png',
+		duration=10,                              # Duration in seconds
+		urgency=Notification.URGENCY_CRITICAL
+	).send()
 
 event_id = []
 
@@ -18,6 +41,7 @@ def add_data():
 	db.insert(query, (field_1, field_2, field_3, field_4))
 	db.close()
 
+	send_notify(title="Dodano nowe wydarzenie", description=field_4)
 	get_data_from_table()
 
 
@@ -28,6 +52,8 @@ def delete_data():
 	db.connect()
 	db.update(query, "")
 	db.close()
+
+	send_notify(title="Usunięto wydarzenie", description="")
 	get_data_from_table()
 
 
@@ -42,6 +68,7 @@ def modify_data():
 	db.update(query, (field_2, field_3, field_4, event_id_str))
 	db.close()
 
+	send_notify(title="Zmodyfikowano wydarzenie", description=field_4)
 	get_data_from_table()
 
 
@@ -144,5 +171,7 @@ if __name__ == "__main__":
 	date_label.config(text=cal.selection_get())
 	get_data_from_table()
 
+	x = threading.Thread(target=abc, args=("Thread-1", 2, ))
+	x.start()
 
 	root.mainloop()
