@@ -8,7 +8,7 @@ def send_notify(title='Notification Title', description='Notification Descriptio
 		title=title,
 		description=description,
 		icon_path='path/to/image/file/icon.png',
-		duration=10,                              # Duration in seconds
+		duration=10,                              # czas powiadomienia w sekundach
 		urgency=urgency
 	).send()
 
@@ -40,5 +40,4 @@ def check_events(sc, db):
 		send_notify("uwaga wydarzenie", x[2], urgency=Notification.URGENCY_CRITICAL)
 	db.close()
 
-	# do your stuff
 	s.enter(60, 1, check_events, (sc, db))
